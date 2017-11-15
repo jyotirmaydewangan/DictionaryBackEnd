@@ -10,7 +10,16 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MeaningResponse {
     private String englishWord;
-    private Map<String, Set<BaseWordNode>> meaning = new HashMap<>();
+    private Map<Integer, Set<BaseWordNode>> synonym;
+    private Map<String, Set<BaseWordNode>> relatedBy = new HashMap();
+
+    public Map<Integer, Set<BaseWordNode>> getSynonym() {
+        return synonym;
+    }
+
+    public void setSynonym(Map<Integer, Set<BaseWordNode>> synonym) {
+        this.synonym = synonym;
+    }
 
     public String getEnglishWord() {
         return englishWord;
@@ -20,11 +29,11 @@ public class MeaningResponse {
         this.englishWord = englishWord;
     }
 
-    public Map<String, Set<BaseWordNode>> getMeaning() {
-        return meaning;
+    public Map<String, Set<BaseWordNode>> getRelatedBy() {
+        return relatedBy;
     }
 
-    public void setMeaning(Map<String, Set<BaseWordNode>> meaning) {
-        this.meaning = meaning;
+    public void setRelatedBy(Map<String, Set<BaseWordNode>> relatedBy) {
+        this.relatedBy = relatedBy;
     }
 }

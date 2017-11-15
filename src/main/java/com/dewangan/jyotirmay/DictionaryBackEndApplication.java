@@ -37,7 +37,6 @@ public class DictionaryBackEndApplication
                     UrduLanguage.class
     ) {
 
-        @Override
         public DataSourceFactory getDataSourceFactory(
                 DictionaryBackEndConfiguration configuration
         ) {
@@ -91,7 +90,7 @@ public class DictionaryBackEndApplication
                         .setRealm("SECURITY REALM")
                         .buildAuthFilter()));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        //environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         //Register a simple resource.
         environment.jersey().register(new HelloResource());
         //Register a secured resource.

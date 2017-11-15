@@ -41,9 +41,10 @@ public class WordResource {
 
 
     private void populateSynonyms(MeaningResponse response, List<Sense> senses){
-        Set<BaseWordNode>  synonyms   = new HashSet<>();
+        Map<Integer, Set<BaseWordNode>> synonyms = new HashMap<Integer, Set<BaseWordNode>>();
         for (Sense sense: senses) {
             List<Sense> similerSenses = senseDAO.findSenseBySynsetId(sense.getSynsetId());
+
             for(Sense similerSense: similerSenses){
                 if(similerSense.getWordId() != sense.getWordId()) {
 
@@ -54,24 +55,32 @@ public class WordResource {
                     wordNode.setDefinition(similerSense.getDefinition());
 
                     List<Sample> samples = sampleDAO.findSampleBySynsetId(similerSense.getSynsetId());
-                    Set<String> examples = new HashSet<>();
+                    Set<String> examples = new HashSet<String>();
                     for (Sample sample : samples) {
                         if (sample.getSample().contains(similerSense.getWord()))
                             examples.add(sample.getSample());
                     }
                     wordNode.setExmples(examples);
 
-                    synonyms.add(wordNode);
+                    Boolean isOldSynonym = synonyms.containsKey(similerSense.getSynsetId());
+                    if(isOldSynonym){
+                        synonyms.get(similerSense.getSynsetId()).add(wordNode);
+                    } else {
+                        Set<BaseWordNode> synonymSet = new HashSet<BaseWordNode>();
+                        synonymSet.add(wordNode);
+                        synonyms.put(similerSense.getSynsetId(), synonymSet);
+                    }
                 }
             }
         }
-        response.getMeaning().put("Synonyms", synonyms);
+        response.setSynonym(synonyms);
     }
 
     private void populateSemantic(MeaningResponse response, List<Sense> senses){
-        Map<String, Set<BaseWordNode>> semantic = new HashMap<>();
+        Map<String, Set<BaseWordNode>> semantic = new HashMap<String, Set<BaseWordNode>>();
         for (Sense sense: senses) {
             List<SemanticLink> semanticLinks =  semanticLinkDAO.findSemanticLinkBySynsetId(sense.getSynsetId());
+
             for(SemanticLink semanticLink : semanticLinks){
                 List<Sense> semantics = senseDAO.findSenseBySynsetId(semanticLink.getSynset2Id());
 
@@ -83,23 +92,26 @@ public class WordResource {
                     wordNode.setPartOfSpeech(semanticSense.getPartOfSpeech());
 
                     Boolean isOldSemantic = semantic.containsKey(semanticLink.getRelatedBy());
+
                     if(isOldSemantic){
                         semantic.get(semanticLink.getRelatedBy()).add(wordNode);
                     } else {
-                        Set<BaseWordNode> semanticSet = new HashSet<>();
+                        Set<BaseWordNode> semanticSet = new HashSet<BaseWordNode>();
                         semanticSet.add(wordNode);
                         semantic.put(semanticLink.getRelatedBy(), semanticSet);
                     }
                 }
             }
         }
-        for(String key: semantic.keySet()){
-            response.getMeaning().put(key, semantic.get(key));
+
+        for (String key : semantic.keySet()) {
+            response.getRelatedBy().put(key, semantic.get(key));
         }
+
     }
 
     private void populateLexical(MeaningResponse response, List<Sense> senses){
-        Map<String, Set<BaseWordNode>> lexical = new HashMap<>();
+        Map<String, Set<BaseWordNode>> lexical = new HashMap<String, Set<BaseWordNode>>();
         for (Sense sense: senses) {
             List<LexicalLink> lexicalLinks = lexicalLinkDAO.findLexicalLinkBySynsetId(sense.getSynsetId());
             for(LexicalLink lexicalLink : lexicalLinks){
@@ -114,7 +126,7 @@ public class WordResource {
                     if(isOldlexical){
                         lexical.get(lexicalLink.getRelatedBy()).add(wordNode);
                     } else {
-                        Set<BaseWordNode> lexicalLinkSet = new HashSet<>();
+                        Set<BaseWordNode> lexicalLinkSet = new HashSet();
                         lexicalLinkSet.add(wordNode);
                         lexical.put(lexicalLink.getRelatedBy(), lexicalLinkSet);
                     }
@@ -123,7 +135,7 @@ public class WordResource {
         }
 
         for(String key: lexical.keySet()){
-            response.getMeaning().put(key, lexical.get(key));
+            response.getRelatedBy().put(key, lexical.get(key));
         }
     }
 
@@ -140,7 +152,7 @@ public class WordResource {
 
         BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
 
-        Set<BaseWordNode> targetLanguage = new HashSet<>();
+        Set<BaseWordNode> targetSenseLanguage = new HashSet<BaseWordNode>();
 
         for (Sense sense: senses) {
             List<Sense> similerSenses = senseDAO.findSenseBySynsetId(sense.getSynsetId());
@@ -151,14 +163,12 @@ public class WordResource {
                     wordNode.setWordId(baseLanguage.getWordId());
                     wordNode.setWord(baseLanguage.getTargetWord());
                     wordNode.setPartOfSpeech(baseLanguage.getPartOfSpeech());
-
-                    targetLanguage.add(wordNode);
-
+                    targetSenseLanguage.add(wordNode);
                 }
             }
         }
 
-        response.getMeaning().put("TargetLanguage", targetLanguage);
+        response.getRelatedBy().put("TargetLanguage", targetSenseLanguage);
     }
 
 
