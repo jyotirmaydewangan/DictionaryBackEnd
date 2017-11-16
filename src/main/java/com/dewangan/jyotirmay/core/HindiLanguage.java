@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "hindi")
 @NamedQueries({
-        @NamedQuery(name = "findHindiWordByWordId", query = "from HindiLanguage h where h.wordId = :wordId")
+        @NamedQuery(name = "findHindiWordByWordId", query = "from HindiLanguage h where h.wordId = :wordId"),
+        @NamedQuery(name = "findTopHindiWordByWordId", query = "from HindiLanguage h where h.wordId = :wordId Order By h.id asc")
 })
 public class HindiLanguage implements BaseLanguage {
     @Id

@@ -8,5 +8,6 @@ import java.util.Set;
 public interface BaseWordNode {
     Integer getWordId();
     String getWord();
+    String gettWord();
     String getPartOfSpeech();
 }

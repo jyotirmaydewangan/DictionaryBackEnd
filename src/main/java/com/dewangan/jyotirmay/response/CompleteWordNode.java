@@ -9,9 +9,18 @@ import java.util.Set;
 public class CompleteWordNode implements BaseWordNode {
     private Integer wordId;
     private String word;
+    private String tWord;
     private String partOfSpeech;
     private String definition;
     private Set<String> exmples;
+
+    public String gettWord() {
+        return tWord;
+    }
+
+    public void settWord(String tWord) {
+        this.tWord = tWord;
+    }
 
     public Set<String> getExmples() {
         return exmples;

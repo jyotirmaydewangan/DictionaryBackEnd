@@ -2,11 +2,8 @@ package com.dewangan.jyotirmay.resources;
 
 import com.dewangan.jyotirmay.core.*;
 import com.dewangan.jyotirmay.db.*;
-import com.dewangan.jyotirmay.response.BaseWordNode;
-import com.dewangan.jyotirmay.response.WordNode;
+import com.dewangan.jyotirmay.response.*;
 import com.dewangan.jyotirmay.util.Language;
-import com.dewangan.jyotirmay.response.CompleteWordNode;
-import com.dewangan.jyotirmay.response.MeaningResponse;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -40,8 +37,10 @@ public class WordResource {
     }
 
 
-    private void populateSynonyms(MeaningResponse response, List<Sense> senses){
+    private void populateSynonyms(MeaningResponse response, List<Sense> senses, String lang){
         Map<Integer, Set<BaseWordNode>> synonyms = new HashMap<Integer, Set<BaseWordNode>>();
+        BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
+
         for (Sense sense: senses) {
             List<Sense> similerSenses = senseDAO.findSenseBySynsetId(sense.getSynsetId());
 
@@ -53,6 +52,7 @@ public class WordResource {
                     wordNode.setWord(similerSense.getWord());
                     wordNode.setPartOfSpeech(similerSense.getPartOfSpeech());
                     wordNode.setDefinition(similerSense.getDefinition());
+                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(similerSense.getWordId()).getTargetWord());
 
                     List<Sample> samples = sampleDAO.findSampleBySynsetId(similerSense.getSynsetId());
                     Set<String> examples = new HashSet<String>();
@@ -63,6 +63,7 @@ public class WordResource {
                     wordNode.setExmples(examples);
 
                     Boolean isOldSynonym = synonyms.containsKey(similerSense.getSynsetId());
+
                     if(isOldSynonym){
                         synonyms.get(similerSense.getSynsetId()).add(wordNode);
                     } else {
@@ -76,8 +77,9 @@ public class WordResource {
         response.setSynonym(synonyms);
     }
 
-    private void populateSemantic(MeaningResponse response, List<Sense> senses){
+    private void populateSemantic(MeaningResponse response, List<Sense> senses, String lang){
         Map<String, Set<BaseWordNode>> semantic = new HashMap<String, Set<BaseWordNode>>();
+        BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
         for (Sense sense: senses) {
             List<SemanticLink> semanticLinks =  semanticLinkDAO.findSemanticLinkBySynsetId(sense.getSynsetId());
 
@@ -90,6 +92,7 @@ public class WordResource {
                     wordNode.setWordId(semanticSense.getWordId());
                     wordNode.setWord(semanticSense.getWord());
                     wordNode.setPartOfSpeech(semanticSense.getPartOfSpeech());
+                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(semanticSense.getWordId()).getTargetWord());
 
                     Boolean isOldSemantic = semantic.containsKey(semanticLink.getRelatedBy());
 
@@ -110,8 +113,9 @@ public class WordResource {
 
     }
 
-    private void populateLexical(MeaningResponse response, List<Sense> senses){
+    private void populateLexical(MeaningResponse response, List<Sense> senses, String lang){
         Map<String, Set<BaseWordNode>> lexical = new HashMap<String, Set<BaseWordNode>>();
+        BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
         for (Sense sense: senses) {
             List<LexicalLink> lexicalLinks = lexicalLinkDAO.findLexicalLinkBySynsetId(sense.getSynsetId());
             for(LexicalLink lexicalLink : lexicalLinks){
@@ -121,6 +125,7 @@ public class WordResource {
                     wordNode.setWordId(lexicalSense.getWordId());
                     wordNode.setWord(lexicalSense.getWord());
                     wordNode.setPartOfSpeech(lexicalSense.getPartOfSpeech());
+                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(lexicalSense.getWordId()).getTargetWord());
 
                     Boolean isOldlexical = lexical.containsKey(lexicalLink.getRelatedBy());
                     if(isOldlexical){
@@ -185,9 +190,9 @@ public class WordResource {
         List<Sense> senses = senseDAO.findByWord(eword);
 
         populateTargetLanguage(response, senses, lang);
-        populateSynonyms(response, senses);
-        populateSemantic(response, senses);
-        populateLexical(response, senses);
+        populateSynonyms(response, senses, lang);
+        populateSemantic(response, senses, lang);
+        populateLexical(response, senses, lang);
 
         return response;
     }

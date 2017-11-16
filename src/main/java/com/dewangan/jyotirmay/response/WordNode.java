@@ -8,7 +8,16 @@ import java.util.Objects;
 public class WordNode implements BaseWordNode{
     private Integer wordId;
     private String word;
+    private String tWord;
     private String partOfSpeech;
+
+    public String gettWord() {
+        return tWord;
+    }
+
+    public void settWord(String tWord) {
+        this.tWord = tWord;
+    }
 
     public Integer getWordId() {
         return wordId;

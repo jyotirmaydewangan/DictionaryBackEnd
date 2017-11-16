@@ -22,4 +22,10 @@ public class UrduLanguageDAO extends AbstractDAO<UrduLanguage> implements BaseLa
         Query getResource = namedQuery("findUrduWordByWordId").setParameter("wordId", wordId);
         return (ArrayList<BaseLanguage>) getResource.list();
     }
+
+    @Override
+    public BaseLanguage findTopTargetWordByWordId(Integer wordId){
+        Query getResource = namedQuery("findTopUrduWordByWordId").setParameter("wordId", wordId).setMaxResults(1);
+        return (BaseLanguage) getResource.uniqueResult();
+    }
 }

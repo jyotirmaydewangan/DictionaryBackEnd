@@ -24,4 +24,10 @@ public class HindiLanguageDAO extends AbstractDAO<HindiLanguage> implements Base
         Query getResource = namedQuery("findHindiWordByWordId").setParameter("wordId", wordId);
         return (ArrayList<BaseLanguage>) getResource.list();
     }
+
+    @Override
+    public BaseLanguage findTopTargetWordByWordId(Integer wordId){
+        Query getResource = namedQuery("findTopHindiWordByWordId").setParameter("wordId", wordId).setMaxResults(1);
+        return (BaseLanguage) getResource.uniqueResult();
+    }
 }
