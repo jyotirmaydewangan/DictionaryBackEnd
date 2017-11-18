@@ -52,7 +52,12 @@ public class WordResource {
                     wordNode.setWord(similerSense.getWord());
                     wordNode.setPartOfSpeech(similerSense.getPartOfSpeech());
                     wordNode.setDefinition(similerSense.getDefinition());
-                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(similerSense.getWordId()).getTargetWord());
+
+
+                    BaseLanguage baseLanguage = baseLanguageDAO.findTopTargetWordByWordId(similerSense.getWordId());
+
+                    if(baseLanguage!=null)
+                        wordNode.settWord(baseLanguage.getTargetWord());
 
                     List<Sample> samples = sampleDAO.findSampleBySynsetId(similerSense.getSynsetId());
                     Set<String> examples = new HashSet<String>();
@@ -92,7 +97,12 @@ public class WordResource {
                     wordNode.setWordId(semanticSense.getWordId());
                     wordNode.setWord(semanticSense.getWord());
                     wordNode.setPartOfSpeech(semanticSense.getPartOfSpeech());
-                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(semanticSense.getWordId()).getTargetWord());
+
+                    BaseLanguage baseLanguage = baseLanguageDAO.findTopTargetWordByWordId(semanticSense.getWordId());
+
+                    if(baseLanguage!=null)
+                        wordNode.settWord(baseLanguage.getTargetWord());
+
 
                     Boolean isOldSemantic = semantic.containsKey(semanticLink.getRelatedBy());
 
@@ -159,21 +169,25 @@ public class WordResource {
 
         Set<BaseWordNode> targetSenseLanguage = new HashSet<BaseWordNode>();
 
-        for (Sense sense: senses) {
-            List<Sense> similerSenses = senseDAO.findSenseBySynsetId(sense.getSynsetId());
-            for(Sense similerSense: similerSenses) {
-                List<BaseLanguage> baseLanguages = baseLanguageDAO.findTargetWordByWordId(similerSense.getWordId());
-                for (BaseLanguage baseLanguage : baseLanguages) {
-                    WordNode wordNode = new WordNode();
-                    wordNode.setWordId(baseLanguage.getWordId());
-                    wordNode.setWord(baseLanguage.getTargetWord());
-                    wordNode.setPartOfSpeech(baseLanguage.getPartOfSpeech());
-                    targetSenseLanguage.add(wordNode);
-                }
+        Set<Integer> wordIds = new HashSet<Integer>();
+
+        for(Sense sense: senses){
+            wordIds.add(sense.getWordId());
+        }
+
+        for(Integer wordId: wordIds){
+            List<BaseLanguage> targetWords = baseLanguageDAO.findTargetWordByWordId(wordId);
+
+            for(BaseLanguage targetWord: targetWords){
+                WordNode wordNode = new WordNode();
+                wordNode.setWordId(targetWord.getWordId());
+                wordNode.setWord(targetWord.getTargetWord());
+                wordNode.setPartOfSpeech(targetWord.getPartOfSpeech());
+                targetSenseLanguage.add(wordNode);
             }
         }
 
-        response.getRelatedBy().put("TargetLanguage", targetSenseLanguage);
+        response.setTargetWord(targetSenseLanguage);
     }
 
 

@@ -10,8 +10,17 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MeaningResponse {
     private String englishWord;
+    private Set<BaseWordNode> targetWord;
     private Map<Integer, Set<BaseWordNode>> synonym;
     private Map<String, Set<BaseWordNode>> relatedBy = new HashMap();
+
+    public Set<BaseWordNode> getTargetWord() {
+        return targetWord;
+    }
+
+    public void setTargetWord(Set<BaseWordNode> targetWord) {
+        this.targetWord = targetWord;
+    }
 
     public Map<Integer, Set<BaseWordNode>> getSynonym() {
         return synonym;
