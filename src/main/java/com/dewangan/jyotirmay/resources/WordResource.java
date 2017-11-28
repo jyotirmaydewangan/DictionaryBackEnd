@@ -36,7 +36,6 @@ public class WordResource {
         this.urduLanguageDAO = urduLanguageDAO;
     }
 
-
     private void populateSynonyms(MeaningResponse response, List<Sense> senses, String lang){
         Map<Integer, Set<BaseWordNode>> synonyms = new HashMap<Integer, Set<BaseWordNode>>();
         BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
@@ -103,7 +102,6 @@ public class WordResource {
                     if(baseLanguage!=null)
                         wordNode.settWord(baseLanguage.getTargetWord());
 
-
                     Boolean isOldSemantic = semantic.containsKey(semanticLink.getRelatedBy());
 
                     if(isOldSemantic){
@@ -135,7 +133,11 @@ public class WordResource {
                     wordNode.setWordId(lexicalSense.getWordId());
                     wordNode.setWord(lexicalSense.getWord());
                     wordNode.setPartOfSpeech(lexicalSense.getPartOfSpeech());
-                    wordNode.settWord(baseLanguageDAO.findTopTargetWordByWordId(lexicalSense.getWordId()).getTargetWord());
+
+                    BaseLanguage baseLanguage = baseLanguageDAO.findTopTargetWordByWordId(lexicalSense.getWordId());
+                    if(baseLanguage != null) {
+                        wordNode.settWord(baseLanguage.getTargetWord());
+                    }
 
                     Boolean isOldlexical = lexical.containsKey(lexicalLink.getRelatedBy());
                     if(isOldlexical){
@@ -190,7 +192,6 @@ public class WordResource {
         response.setTargetWord(targetSenseLanguage);
     }
 
-
     @GET
     @Path("/word/{eword}/{lang}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -199,7 +200,7 @@ public class WordResource {
 
         MeaningResponse response = new MeaningResponse();
 
-        response.setEnglishWord(eword);
+        response.setToWord(eword);
 
         List<Sense> senses = senseDAO.findByWord(eword);
 
@@ -209,5 +210,50 @@ public class WordResource {
         populateLexical(response, senses, lang);
 
         return response;
+    }
+
+
+    @GET
+    @Path("/reverseWord/{tword}/{lang}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public MeaningResponse getReverseSensesByWord(@PathParam(value = "tword") String tword, @PathParam(value = "lang") String lang) {
+
+        MeaningResponse response = new MeaningResponse();
+
+        response.setToWord(tword);
+        BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
+        List<BaseLanguage> baseLanguages = baseLanguageDAO.findTargetWordByWord(tword);
+
+        Set<Integer> wordIds = new HashSet<Integer>();
+
+        for(BaseLanguage baseLanguage : baseLanguages) {
+            wordIds.add(baseLanguage.getWordId());
+        }
+
+        populateReverseTargetLanguage(response, wordIds);
+
+        return response;
+    }
+
+
+    private void populateReverseTargetLanguage(MeaningResponse response, Set<Integer> wordIds) {
+
+        Set<BaseWordNode> targetSenseLanguage = new HashSet<BaseWordNode>();
+
+        for(Integer wordId: wordIds){
+
+            List<Sense> senses = senseDAO.findSenseByWordId(wordId);
+
+            for(Sense sense: senses){
+                WordNode wordNode = new WordNode();
+                wordNode.setWordId(sense.getWordId());
+                wordNode.setWord(sense.getWord());
+                wordNode.setPartOfSpeech(sense.getPartOfSpeech());
+                targetSenseLanguage.add(wordNode);
+            }
+        }
+
+        response.setTargetWord(targetSenseLanguage);
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "hindi")
 @NamedQueries({
         @NamedQuery(name = "findHindiWordByWordId", query = "from HindiLanguage h where h.wordId = :wordId"),
+        @NamedQuery(name = "findHindiWordByWord", query = "from HindiLanguage h where h.targetWord = :word"),
         @NamedQuery(name = "findTopHindiWordByWordId", query = "from HindiLanguage h where h.wordId = :wordId Order By h.id asc"),
         @NamedQuery(name = "findTopNonTextHindiWordByWordId", query = "from HindiLanguage h where h.partOfSpeech != :partOfSpeech and h.wordId = :wordId Order By h.id asc")
 })

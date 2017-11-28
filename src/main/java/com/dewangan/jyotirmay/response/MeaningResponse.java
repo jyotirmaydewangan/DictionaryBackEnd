@@ -9,7 +9,7 @@ import java.util.*;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MeaningResponse {
-    private String englishWord;
+    private String toWord;
     private Set<BaseWordNode> targetWord;
     private Map<Integer, Set<BaseWordNode>> synonym;
     private Map<String, Set<BaseWordNode>> relatedBy = new HashMap();
@@ -30,12 +30,12 @@ public class MeaningResponse {
         this.synonym = synonym;
     }
 
-    public String getEnglishWord() {
-        return englishWord;
+    public String getToWord() {
+        return toWord;
     }
 
-    public void setEnglishWord(String englishWord) {
-        this.englishWord = englishWord;
+    public void setToWord(String toWord) {
+        this.toWord = toWord;
     }
 
     public Map<String, Set<BaseWordNode>> getRelatedBy() {

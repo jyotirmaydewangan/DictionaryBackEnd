@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface BaseLanguageDAO {
     public List<BaseLanguage> findTargetWordByWordId(Integer wordId);
+    public List<BaseLanguage> findTargetWordByWord(String word);
     public BaseLanguage findTopTargetWordByWordId(Integer wordId);
     public BaseLanguage findTopNonTextTargetWordByWordId(Integer wordId);
 }
