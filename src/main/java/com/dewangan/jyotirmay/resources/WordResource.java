@@ -36,7 +36,7 @@ public class WordResource {
         this.urduLanguageDAO = urduLanguageDAO;
     }
 
-    private void populateSynonyms(MeaningResponse response, List<Sense> senses, String lang){
+    private void populateSynonyms(MeaningResponse response, Collection<Sense> senses, String lang){
         Map<Integer, Set<BaseWordNode>> synonyms = new HashMap<Integer, Set<BaseWordNode>>();
         BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
 
