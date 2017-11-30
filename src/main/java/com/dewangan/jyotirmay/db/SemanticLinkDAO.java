@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ public class SemanticLinkDAO extends AbstractDAO<SemanticLink> {
     }
 
     public List<SemanticLink> findSemanticLinkBySynsetId(Integer synsetId) {
-        Query getResource = namedQuery("findSemanticLinkBySynsetId").setParameter("synsetId", synsetId);
+        List<String> relatedByList = new ArrayList<String>(Arrays.asList("derivation", "also", "similar", "antonym"));
+        Query getResource = namedQuery("findSemanticLinkBySynsetId").setParameter("synsetId", synsetId).setParameterList("relatedByList", relatedByList);
         return (ArrayList<SemanticLink>) getResource.list();
     }
 }

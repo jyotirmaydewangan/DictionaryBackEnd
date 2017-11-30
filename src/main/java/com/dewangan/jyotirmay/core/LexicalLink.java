@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "lexicalLinks")
 @NamedQueries({
-        @NamedQuery(name = "findLexicalLinkSynsetId", query = "from LexicalLink s where s.synset1Id = :synsetId"),
-        @NamedQuery(name = "findLexicalLinkByWordId", query = "from LexicalLink s where s.word1Id = :wordId")
+        @NamedQuery(name = "findLexicalLinkSynsetId", query = "from LexicalLink s where s.synset1Id = :synsetId and s.relatedBy in :relatedByList"),
+        @NamedQuery(name = "findLexicalLinkByWordId", query = "from LexicalLink s where s.word1Id = :wordId and s.relatedBy in :relatedByList")
 })
 public class LexicalLink {
     @Id

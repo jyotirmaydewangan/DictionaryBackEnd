@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "semanticLinks")
 @NamedQueries({
-        @NamedQuery(name = "findSemanticLinkBySynsetId", query = "from SemanticLink s where s.synset1Id = :synsetId")
+        @NamedQuery(name = "findSemanticLinkBySynsetId", query = "from SemanticLink s where s.synset1Id = :synsetId and s.relatedBy in :relatedByList")
 })
 public class SemanticLink {
 

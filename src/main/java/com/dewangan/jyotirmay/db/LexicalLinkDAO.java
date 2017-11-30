@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,12 +18,14 @@ public class LexicalLinkDAO extends AbstractDAO<LexicalLink> {
     }
 
     public List<LexicalLink> findLexicalLinkBySynsetId(Integer synsetId) {
-        Query getResource = namedQuery("findLexicalLinkSynsetId").setParameter("synsetId", synsetId);
+        List<String> relatedByList = new ArrayList<String>(Arrays.asList("derivation", "also", "similar", "antonym"));
+        Query getResource = namedQuery("findLexicalLinkSynsetId").setParameter("synsetId", synsetId).setParameterList("relatedByList", relatedByList);
         return (ArrayList<LexicalLink>) getResource.list();
     }
 
     public List<LexicalLink> findLexicalLinkByWordId(Integer wordId) {
-        Query getResource = namedQuery("findLexicalLinkByWordId").setParameter("wordId", wordId);
+        List<String> relatedByList = new ArrayList<String>(Arrays.asList("derivation", "also", "similar", "antonym"));
+        Query getResource = namedQuery("findLexicalLinkByWordId").setParameter("wordId", wordId).setParameterList("relatedByList", relatedByList);
         return (ArrayList<LexicalLink>) getResource.list();
     }
 }
