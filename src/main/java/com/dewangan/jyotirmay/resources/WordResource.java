@@ -25,15 +25,20 @@ public class WordResource {
     private final SampleDAO sampleDAO;
     private final HindiLanguageDAO hindiLanguageDAO;
     private final UrduLanguageDAO urduLanguageDAO;
+    private final TeluguLanguageDAO teluguLanguageDAO;
+    private final BengaliLanguageDAO bengaliLanguageDAO;
 
     public WordResource(SenseDAO senseDAO, SemanticLinkDAO semanticLinkDAO, LexicalLinkDAO lexicalLinkDAO, SampleDAO sampleDAO,
-                        HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO) {
+                        HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO, TeluguLanguageDAO teluguLanguageDAO,
+                        BengaliLanguageDAO bengaliLanguageDAO) {
         this.senseDAO = senseDAO;
         this.semanticLinkDAO = semanticLinkDAO;
         this.lexicalLinkDAO = lexicalLinkDAO;
         this.sampleDAO = sampleDAO;
         this.hindiLanguageDAO = hindiLanguageDAO;
         this.urduLanguageDAO = urduLanguageDAO;
+        this.teluguLanguageDAO = teluguLanguageDAO;
+        this.bengaliLanguageDAO = bengaliLanguageDAO;
     }
 
     private void populateSynonyms(MeaningResponse response, Collection<Sense> senses, String lang){
@@ -161,6 +166,10 @@ public class WordResource {
             return this.hindiLanguageDAO;
         } else if(lang.equalsIgnoreCase(Language.URDU.name())){
             return this.urduLanguageDAO;
+        } else if(lang.equalsIgnoreCase(Language.TELUGU.name())){
+            return this.teluguLanguageDAO;
+        } else if(lang.equalsIgnoreCase(Language.BENGALI.name())){
+            return this.bengaliLanguageDAO;
         }
         return this.hindiLanguageDAO;
     }

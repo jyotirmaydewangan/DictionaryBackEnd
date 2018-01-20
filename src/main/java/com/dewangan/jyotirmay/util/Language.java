@@ -5,7 +5,9 @@ package com.dewangan.jyotirmay.util;
  */
 public enum Language {
     HINDI("hindi"),
-    URDU("urdu");
+    URDU("urdu"),
+    TELUGU("telugu"),
+    BENGALI("bengali");
 
     private String language;
 

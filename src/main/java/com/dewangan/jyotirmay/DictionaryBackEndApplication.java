@@ -34,7 +34,9 @@ public class DictionaryBackEndApplication
                     LexicalLink.class,
                     Sample.class,
                     HindiLanguage.class,
-                    UrduLanguage.class
+                    UrduLanguage.class,
+                    TeluguLanguage.class,
+                    BengaliLanguage.class
     ) {
 
         public DataSourceFactory getDataSourceFactory(
@@ -76,6 +78,8 @@ public class DictionaryBackEndApplication
         final SampleDAO sempleDAO = new SampleDAO(hibernateBundle.getSessionFactory());
         final HindiLanguageDAO hindiLanguageDAO = new HindiLanguageDAO(hibernateBundle.getSessionFactory());
         final UrduLanguageDAO urduLanguageDAO = new UrduLanguageDAO(hibernateBundle.getSessionFactory());
+        final TeluguLanguageDAO teluguLanguageDAO = new TeluguLanguageDAO(hibernateBundle.getSessionFactory());
+        final BengaliLanguageDAO bengaliLanguageDAO = new BengaliLanguageDAO(hibernateBundle.getSessionFactory());
 
         //Create Jersey client.
         final Client client = new JerseyClientBuilder(environment)
@@ -98,7 +102,8 @@ public class DictionaryBackEndApplication
         //Register a database-backed resource.
         environment.jersey().register(new EmployeesResource(employeeDAO));
         environment.jersey().register(new WordResource(senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
-                                                        hindiLanguageDAO, urduLanguageDAO));
+                                                        hindiLanguageDAO, urduLanguageDAO, teluguLanguageDAO,
+                                                        bengaliLanguageDAO));
         //Register a resource using Jersey client.
         environment.jersey().register(
                 new ConverterResource(
