@@ -7,7 +7,8 @@ public enum Language {
     HINDI("hindi"),
     URDU("urdu"),
     TELUGU("telugu"),
-    BENGALI("bengali");
+    BENGALI("bengali"),
+    MARATHI("marathi");
 
     private String language;
 
