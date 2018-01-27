@@ -2,6 +2,8 @@ package com.dewangan.jyotirmay.resources;
 
 import com.dewangan.jyotirmay.core.*;
 import com.dewangan.jyotirmay.db.*;
+import com.dewangan.jyotirmay.db.language.*;
+import com.dewangan.jyotirmay.language.BaseLanguage;
 import com.dewangan.jyotirmay.response.*;
 import com.dewangan.jyotirmay.util.Language;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -20,6 +22,7 @@ import java.util.*;
 public class WordResource {
 
     private final SenseDAO senseDAO;
+    private final WordDAO wordDAO;
     private final SemanticLinkDAO semanticLinkDAO;
     private final LexicalLinkDAO lexicalLinkDAO;
     private final SampleDAO sampleDAO;
@@ -29,9 +32,11 @@ public class WordResource {
     private final BengaliLanguageDAO bengaliLanguageDAO;
     private final MarathiLanguageDAO marathiLanguageDAO;
 
-    public WordResource(SenseDAO senseDAO, SemanticLinkDAO semanticLinkDAO, LexicalLinkDAO lexicalLinkDAO, SampleDAO sampleDAO,
-                        HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO, TeluguLanguageDAO teluguLanguageDAO,
-                        BengaliLanguageDAO bengaliLanguageDAO, MarathiLanguageDAO marathiLanguageDAO) {
+    public WordResource(WordDAO wordDAO, SenseDAO senseDAO, SemanticLinkDAO semanticLinkDAO, LexicalLinkDAO lexicalLinkDAO,
+                        SampleDAO sampleDAO, HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO,
+                        TeluguLanguageDAO teluguLanguageDAO, BengaliLanguageDAO bengaliLanguageDAO,
+                        MarathiLanguageDAO marathiLanguageDAO) {
+        this.wordDAO = wordDAO;
         this.senseDAO = senseDAO;
         this.semanticLinkDAO = semanticLinkDAO;
         this.lexicalLinkDAO = lexicalLinkDAO;
@@ -203,6 +208,29 @@ public class WordResource {
         }
 
         response.setTargetWord(targetSenseLanguage);
+    }
+
+    @GET
+    @Path("/wordList/{char}/{page}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public WordListResponse getWordList(@PathParam(value = "char") String ch, @PathParam(value = "page") Integer page) {
+
+        WordListResponse wordListResponse = new WordListResponse();
+
+        List<String> wordList = new ArrayList<String>();
+
+        List<Word> words = wordDAO.findWordList(ch, (page-1)*80);
+
+        Integer count = wordDAO.findWordCount(ch);
+
+        for(Word word : words){
+            wordList.add(word.getLemma());
+        }
+        wordListResponse.setWordList(wordList);
+        wordListResponse.setPageCount(((count-1)/80)+1);
+
+        return wordListResponse;
     }
 
     @GET

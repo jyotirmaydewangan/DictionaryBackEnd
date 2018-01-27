@@ -3,10 +3,11 @@ package com.dewangan.jyotirmay;
 import com.dewangan.jyotirmay.auth.GreetingAuthenticator;
 import com.dewangan.jyotirmay.core.*;
 import com.dewangan.jyotirmay.db.*;
+import com.dewangan.jyotirmay.db.language.*;
+import com.dewangan.jyotirmay.language.*;
 import com.dewangan.jyotirmay.resources.*;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.db.DataSourceFactory;
@@ -28,16 +29,11 @@ public class DictionaryBackEndApplication
      * Hibernate bundle.
      */
     private final HibernateBundle<DictionaryBackEndConfiguration> hibernateBundle = new HibernateBundle<DictionaryBackEndConfiguration>(
-                    Employee.class,
-                    Sense.class,
-                    SemanticLink.class,
-                    LexicalLink.class,
-                    Sample.class,
-                    HindiLanguage.class,
-                    UrduLanguage.class,
-                    TeluguLanguage.class,
-                    BengaliLanguage.class,
-                    MarathiLanguage.class
+                    Employee.class, Sense.class, SemanticLink.class, LexicalLink.class,
+                    Sample.class, Word.class,
+
+                    HindiLanguage.class, UrduLanguage.class, TeluguLanguage.class,
+                    BengaliLanguage.class, MarathiLanguage.class
     ) {
 
         public DataSourceFactory getDataSourceFactory(
@@ -74,9 +70,11 @@ public class DictionaryBackEndApplication
         //Create Employee DAO.
         final EmployeeDAO employeeDAO = new EmployeeDAO(hibernateBundle.getSessionFactory());
         final SenseDAO senseDAO = new SenseDAO(hibernateBundle.getSessionFactory());
+        final WordDAO wordDAO = new WordDAO(hibernateBundle.getSessionFactory());
         final SemanticLinkDAO semanticLinkDAO = new SemanticLinkDAO(hibernateBundle.getSessionFactory());
         final LexicalLinkDAO lexicalLinkDAO = new LexicalLinkDAO(hibernateBundle.getSessionFactory());
         final SampleDAO sempleDAO = new SampleDAO(hibernateBundle.getSessionFactory());
+
         final HindiLanguageDAO hindiLanguageDAO = new HindiLanguageDAO(hibernateBundle.getSessionFactory());
         final UrduLanguageDAO urduLanguageDAO = new UrduLanguageDAO(hibernateBundle.getSessionFactory());
         final TeluguLanguageDAO teluguLanguageDAO = new TeluguLanguageDAO(hibernateBundle.getSessionFactory());
@@ -103,7 +101,7 @@ public class DictionaryBackEndApplication
         environment.jersey().register(new SecuredHelloResource());
         //Register a database-backed resource.
         environment.jersey().register(new EmployeesResource(employeeDAO));
-        environment.jersey().register(new WordResource(senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
+        environment.jersey().register(new WordResource(wordDAO, senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
                                                         hindiLanguageDAO, urduLanguageDAO, teluguLanguageDAO,
                                                         bengaliLanguageDAO, marathiLanguageDAO));
         //Register a resource using Jersey client.

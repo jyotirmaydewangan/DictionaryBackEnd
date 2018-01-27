@@ -1,7 +1,7 @@
-package com.dewangan.jyotirmay.db;
+package com.dewangan.jyotirmay.db.language;
 
-import com.dewangan.jyotirmay.core.BaseLanguage;
-import com.dewangan.jyotirmay.core.HindiLanguage;
+import com.dewangan.jyotirmay.language.BaseLanguage;
+import com.dewangan.jyotirmay.language.HindiLanguage;
 
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;

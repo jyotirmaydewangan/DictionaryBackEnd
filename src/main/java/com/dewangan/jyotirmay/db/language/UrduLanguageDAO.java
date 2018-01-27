@@ -1,7 +1,7 @@
-package com.dewangan.jyotirmay.db;
+package com.dewangan.jyotirmay.db.language;
 
-import com.dewangan.jyotirmay.core.BaseLanguage;
-import com.dewangan.jyotirmay.core.MarathiLanguage;
+import com.dewangan.jyotirmay.language.BaseLanguage;
+import com.dewangan.jyotirmay.language.UrduLanguage;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -12,30 +12,30 @@ import java.util.List;
 /**
  * Created by jyotirmay.d on 10/11/17.
  */
-public class MarathiLanguageDAO extends AbstractDAO<MarathiLanguage> implements BaseLanguageDAO {
-    public MarathiLanguageDAO(SessionFactory sessionFactory) {
+public class UrduLanguageDAO extends AbstractDAO<UrduLanguage> implements BaseLanguageDAO {
+    public UrduLanguageDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
 
     public List<BaseLanguage> findTargetWordByWordId(Integer wordId) {
-        Query getResource = namedQuery("findMarathiWordByWordId").setParameter("wordId", wordId);
+        Query getResource = namedQuery("findUrduWordByWordId").setParameter("wordId", wordId);
         return (ArrayList<BaseLanguage>) getResource.list();
     }
 
     public List<BaseLanguage> findTargetWordByWord(String word) {
-        Query getResource = namedQuery("findMarathiWordByWord").setParameter("word", word);
+        Query getResource = namedQuery("findUrduWordByWord").setParameter("word", word);
         return (ArrayList<BaseLanguage>) getResource.list();
     }
 
     public BaseLanguage findTopTargetWordByWordId(Integer wordId){
-        Query getResource = namedQuery("findTopMarathiWordByWordId").setParameter("wordId", wordId).setMaxResults(1);
+        Query getResource = namedQuery("findTopUrduWordByWordId").setParameter("wordId", wordId).setMaxResults(1);
         return (BaseLanguage) getResource.uniqueResult();
     }
 
     public BaseLanguage findTopNonTextTargetWordByWordId(Integer wordId) {
         String text = "text";
-        Query getResource = namedQuery("findTopNonTextMarathiWordByWordId").setParameter("wordId", wordId).setParameter("partOfSpeech", text).setMaxResults(1);
+        Query getResource = namedQuery("findTopNonTextUrduWordByWordId").setParameter("wordId", wordId).setParameter("partOfSpeech", text).setMaxResults(1);
         return (BaseLanguage) getResource.uniqueResult();
     }
 }

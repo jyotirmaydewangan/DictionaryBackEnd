@@ -1,22 +1,24 @@
-package com.dewangan.jyotirmay.core;
+/**
+ * Created by jyotirmay.d on 20/01/18.
+ */
+package com.dewangan.jyotirmay.language;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
-
 import javax.persistence.*;
 
 /**
  * Created by jyotirmay.d on 10/11/17.
  */
 @Entity
-@Table(name = "urdu")
+@Table(name = "Marathi")
 @NamedQueries({
-        @NamedQuery(name = "findUrduWordByWordId", query = "from UrduLanguage u where u.wordId = :wordId"),
-        @NamedQuery(name = "findUrduWordByWord", query = "from UrduLanguage u where u.targetWord = :word"),
-        @NamedQuery(name = "findTopUrduWordByWordId", query = "from UrduLanguage u where u.wordId = :wordId Order By u.id asc"),
-        @NamedQuery(name = "findTopNonTextUrduWordByWordId", query = "from UrduLanguage u where u.partOfSpeech != :partOfSpeech and u.wordId = :wordId Order By u.id asc")
+        @NamedQuery(name = "findMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId"),
+        @NamedQuery(name = "findMarathiWordByWord", query = "from MarathiLanguage h where h.targetWord = :word"),
+        @NamedQuery(name = "findTopMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId Order By h.id asc"),
+        @NamedQuery(name = "findTopNonTextMarathiWordByWordId", query = "from MarathiLanguage h where h.partOfSpeech != :partOfSpeech and h.wordId = :wordId Order By h.id asc")
 })
-public class UrduLanguage implements BaseLanguage {
+public class MarathiLanguage implements BaseLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;

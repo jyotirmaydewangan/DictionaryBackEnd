@@ -1,6 +1,6 @@
-package com.dewangan.jyotirmay.db;
+package com.dewangan.jyotirmay.db.language;
 
-import com.dewangan.jyotirmay.core.BaseLanguage;
+import com.dewangan.jyotirmay.language.BaseLanguage;
 
 import java.util.List;
 

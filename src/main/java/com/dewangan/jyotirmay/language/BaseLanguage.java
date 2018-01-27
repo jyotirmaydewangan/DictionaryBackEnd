@@ -1,4 +1,4 @@
-package com.dewangan.jyotirmay.core;
+package com.dewangan.jyotirmay.language;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
