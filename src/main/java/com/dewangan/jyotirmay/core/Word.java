@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "words")
 @NamedQueries({
-        @NamedQuery(name = "findWordList", query = "from Word w where w.lemma like :begin")
+        @NamedQuery(name = "findWordList", query = "from Word w where w.lemma like :begin and w.lemma not like :space")
 })
 public class Word {
     @Id

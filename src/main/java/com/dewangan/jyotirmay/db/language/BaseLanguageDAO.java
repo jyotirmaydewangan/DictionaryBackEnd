@@ -1,7 +1,10 @@
 package com.dewangan.jyotirmay.db.language;
 
+import com.dewangan.jyotirmay.core.Word;
 import com.dewangan.jyotirmay.language.BaseLanguage;
+import org.hibernate.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,4 +16,6 @@ public interface BaseLanguageDAO {
     public List<BaseLanguage> findTargetWordByWord(String word);
     public BaseLanguage findTopTargetWordByWordId(Integer wordId);
     public BaseLanguage findTopNonTextTargetWordByWordId(Integer wordId);
+    public List<String> findWordList(String ch, Integer start);
+    public Integer findWordCount(String ch);
 }

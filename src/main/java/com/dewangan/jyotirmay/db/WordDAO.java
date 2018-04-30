@@ -18,13 +18,16 @@ public class WordDAO extends AbstractDAO<Word> {
     }
 
     public List<Word> findWordList(String ch, Integer start) {
-        Query getResource = namedQuery("findWordList").setParameter("begin", ch+"%").setFirstResult(start).setMaxResults(80);
+        Query getResource = namedQuery("findWordList")
+                .setParameter("begin", ch+"%")
+                .setParameter("space", "% %")
+                .setFirstResult(start).setMaxResults(80);
 
         return (ArrayList<Word>) getResource.list();
     }
 
     public Integer findWordCount(String ch) {
-        Query getResource = namedQuery("findWordList").setParameter("begin", ch+"%");
+        Query getResource = namedQuery("findWordList").setParameter("begin", ch+"%").setParameter("space", "% %");
         return getResource.list().size();
     }
 }

@@ -38,4 +38,19 @@ public class BengaliLanguageDAO extends AbstractDAO<BengaliLanguage> implements 
         Query getResource = namedQuery("findTopNonTextBengaliWordByWordId").setParameter("wordId", wordId).setParameter("partOfSpeech", text).setMaxResults(1);
         return (BaseLanguage) getResource.uniqueResult();
     }
+
+
+    public List<String> findWordList(String ch, Integer start) {
+        Query getResource = namedQuery("findBengaliWordList")
+                .setParameter("begin", ch+"%")
+                .setParameter("space", "% %")
+                .setFirstResult(start).setMaxResults(80);
+
+        return (ArrayList<String>) getResource.list();
+    }
+
+    public Integer findWordCount(String ch) {
+        Query getResource = namedQuery("findBengaliWordList").setParameter("begin", ch+"%").setParameter("space", "% %");
+        return getResource.list().size();
+    }
 }

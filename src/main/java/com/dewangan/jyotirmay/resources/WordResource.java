@@ -6,6 +6,7 @@ import com.dewangan.jyotirmay.db.language.*;
 import com.dewangan.jyotirmay.language.BaseLanguage;
 import com.dewangan.jyotirmay.response.*;
 import com.dewangan.jyotirmay.util.Language;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -13,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -23,6 +25,7 @@ public class WordResource {
 
     private final SenseDAO senseDAO;
     private final WordDAO wordDAO;
+    private final ScriptDAO scriptDAO;
     private final SemanticLinkDAO semanticLinkDAO;
     private final LexicalLinkDAO lexicalLinkDAO;
     private final SampleDAO sampleDAO;
@@ -32,11 +35,12 @@ public class WordResource {
     private final BengaliLanguageDAO bengaliLanguageDAO;
     private final MarathiLanguageDAO marathiLanguageDAO;
 
-    public WordResource(WordDAO wordDAO, SenseDAO senseDAO, SemanticLinkDAO semanticLinkDAO, LexicalLinkDAO lexicalLinkDAO,
-                        SampleDAO sampleDAO, HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO,
-                        TeluguLanguageDAO teluguLanguageDAO, BengaliLanguageDAO bengaliLanguageDAO,
-                        MarathiLanguageDAO marathiLanguageDAO) {
+    public WordResource(WordDAO wordDAO, ScriptDAO scriptDAO, SenseDAO senseDAO, SemanticLinkDAO semanticLinkDAO,
+                        LexicalLinkDAO lexicalLinkDAO, SampleDAO sampleDAO,
+                        HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO, TeluguLanguageDAO teluguLanguageDAO,
+                        BengaliLanguageDAO bengaliLanguageDAO, MarathiLanguageDAO marathiLanguageDAO) {
         this.wordDAO = wordDAO;
+        this.scriptDAO = scriptDAO;
         this.senseDAO = senseDAO;
         this.semanticLinkDAO = semanticLinkDAO;
         this.lexicalLinkDAO = lexicalLinkDAO;
@@ -211,24 +215,37 @@ public class WordResource {
     }
 
     @GET
-    @Path("/wordList/{char}/{page}")
+    @Path("/wordList/{lang}/{char}/{page}")
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public WordListResponse getWordList(@PathParam(value = "char") String ch, @PathParam(value = "page") Integer page) {
+    public WordListResponse getWordList(@PathParam(value = "lang") String lang, @PathParam(value = "char") String ch, @PathParam(value = "page") Integer page) throws IOException {
 
         WordListResponse wordListResponse = new WordListResponse();
-
+        ObjectMapper objectMapper = new ObjectMapper();
         List<String> wordList = new ArrayList<String>();
+        Integer count=1;
 
-        List<Word> words = wordDAO.findWordList(ch, (page-1)*80);
-
-        Integer count = wordDAO.findWordCount(ch);
-
-        for(Word word : words){
-            wordList.add(word.getLemma());
+        if(lang.equalsIgnoreCase("english")) {
+            List<Word> words = wordDAO.findWordList(ch, (page - 1) * 80);
+            count = wordDAO.findWordCount(ch);
+            for (Word word : words) {
+                wordList.add(word.getLemma());
+            }
+        } else {
+            BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
+            List<String> words = baseLanguageDAO.findWordList(ch, (page - 1) * 80);
+            count = baseLanguageDAO.findWordCount(ch);
+            for (String word : words) {
+                wordList.add(word);
+            }
         }
+
+        String letters = scriptDAO.findScript(lang).getLetters();
+        List<String> scripts = objectMapper.readValue(letters, ArrayList.class);
+
         wordListResponse.setWordList(wordList);
         wordListResponse.setPageCount(((count-1)/80)+1);
+        wordListResponse.setLetters(scripts);
 
         return wordListResponse;
     }

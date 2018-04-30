@@ -8,6 +8,15 @@ import java.util.List;
 public class WordListResponse {
     private List<String> wordList;
     private Integer pageCount;
+    private List<String> letters;
+
+    public List<String> getLetters() {
+        return letters;
+    }
+
+    public void setLetters(List<String> letters) {
+        this.letters = letters;
+    }
 
     public Integer getPageCount() {
         return pageCount;

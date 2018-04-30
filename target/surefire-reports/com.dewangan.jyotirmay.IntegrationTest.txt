@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.dewangan.jyotirmay.IntegrationTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.589 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.241 sec

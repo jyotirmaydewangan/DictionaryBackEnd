@@ -30,7 +30,7 @@ public class DictionaryBackEndApplication
      */
     private final HibernateBundle<DictionaryBackEndConfiguration> hibernateBundle = new HibernateBundle<DictionaryBackEndConfiguration>(
                     Employee.class, Sense.class, SemanticLink.class, LexicalLink.class,
-                    Sample.class, Word.class,
+                    Sample.class, Word.class, Script.class,
 
                     HindiLanguage.class, UrduLanguage.class, TeluguLanguage.class,
                     BengaliLanguage.class, MarathiLanguage.class
@@ -71,6 +71,7 @@ public class DictionaryBackEndApplication
         final EmployeeDAO employeeDAO = new EmployeeDAO(hibernateBundle.getSessionFactory());
         final SenseDAO senseDAO = new SenseDAO(hibernateBundle.getSessionFactory());
         final WordDAO wordDAO = new WordDAO(hibernateBundle.getSessionFactory());
+        final ScriptDAO scriptDAO = new ScriptDAO(hibernateBundle.getSessionFactory());
         final SemanticLinkDAO semanticLinkDAO = new SemanticLinkDAO(hibernateBundle.getSessionFactory());
         final LexicalLinkDAO lexicalLinkDAO = new LexicalLinkDAO(hibernateBundle.getSessionFactory());
         final SampleDAO sempleDAO = new SampleDAO(hibernateBundle.getSessionFactory());
@@ -101,7 +102,8 @@ public class DictionaryBackEndApplication
         environment.jersey().register(new SecuredHelloResource());
         //Register a database-backed resource.
         environment.jersey().register(new EmployeesResource(employeeDAO));
-        environment.jersey().register(new WordResource(wordDAO, senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
+        environment.jersey().register(new WordResource(wordDAO, scriptDAO, senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
+
                                                         hindiLanguageDAO, urduLanguageDAO, teluguLanguageDAO,
                                                         bengaliLanguageDAO, marathiLanguageDAO));
         //Register a resource using Jersey client.

@@ -16,7 +16,8 @@ import javax.persistence.*;
         @NamedQuery(name = "findMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId"),
         @NamedQuery(name = "findMarathiWordByWord", query = "from MarathiLanguage h where h.targetWord = :word"),
         @NamedQuery(name = "findTopMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId Order By h.id asc"),
-        @NamedQuery(name = "findTopNonTextMarathiWordByWordId", query = "from MarathiLanguage h where h.partOfSpeech != :partOfSpeech and h.wordId = :wordId Order By h.id asc")
+        @NamedQuery(name = "findTopNonTextMarathiWordByWordId", query = "from MarathiLanguage h where h.partOfSpeech != :partOfSpeech and h.wordId = :wordId Order By h.id asc"),
+        @NamedQuery(name = "findMarathiWordList", query = "select distinct w.targetWord from MarathiLanguage w where w.targetWord like :begin and w.targetWord not like :space")
 })
 public class MarathiLanguage implements BaseLanguage {
     @Id
