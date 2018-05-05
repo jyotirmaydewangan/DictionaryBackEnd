@@ -3,6 +3,7 @@
  */
 package com.dewangan.jyotirmay.language;
 
+import com.dewangan.jyotirmay.core.Word;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import javax.persistence.*;
@@ -11,19 +12,21 @@ import javax.persistence.*;
  * Created by jyotirmay.d on 10/11/17.
  */
 @Entity
-@Table(name = "marathi")
+@Table(name = "Marathi")
 @NamedQueries({
-        @NamedQuery(name = "findMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId"),
-        @NamedQuery(name = "findMarathiWordByWord", query = "from MarathiLanguage h where h.targetWord = :word"),
-        @NamedQuery(name = "findTopMarathiWordByWordId", query = "from MarathiLanguage h where h.wordId = :wordId Order By h.id asc"),
-        @NamedQuery(name = "findTopNonTextMarathiWordByWordId", query = "from MarathiLanguage h where h.partOfSpeech != :partOfSpeech and h.wordId = :wordId Order By h.id asc"),
+        @NamedQuery(name = "findMarathiWordByWord", query = "from MarathiLanguage h where h.engWord.englishWord = :word"),
+        @NamedQuery(name = "findEnglishWordByMarathiWord", query = "from MarathiLanguage h where h.targetWord = :word"),
         @NamedQuery(name = "findMarathiWordList", query = "select distinct w.targetWord from MarathiLanguage w where w.targetWord like :begin and w.targetWord not like :space")
 })
 public class MarathiLanguage implements BaseLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
-    public Integer wordId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wordId")
+    public Word engWord;
+
     public String targetWord;
     public String partOfSpeech;
 
@@ -35,12 +38,12 @@ public class MarathiLanguage implements BaseLanguage {
         this.id = id;
     }
 
-    public Integer getWordId() {
-        return wordId;
+    public Word getEngWord() {
+        return engWord;
     }
 
-    public void setWordId(Integer wordId) {
-        this.wordId = wordId;
+    public void setEngWord(Word engWord) {
+        this.engWord = engWord;
     }
 
     public String getTargetWord() {

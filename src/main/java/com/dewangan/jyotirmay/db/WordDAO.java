@@ -17,6 +17,15 @@ public class WordDAO extends AbstractDAO<Word> {
         super(sessionFactory);
     }
 
+    public Word findByWord(String word) {
+        Query getResource = namedQuery("findWordByWord").setParameter("word", word);
+
+        if(getResource.list().isEmpty())
+            return null;
+
+        return (Word) getResource.list().get(0);
+    }
+
     public List<Word> findWordList(String ch, Integer start) {
         Query getResource = namedQuery("findWordList")
                 .setParameter("begin", ch+"%")

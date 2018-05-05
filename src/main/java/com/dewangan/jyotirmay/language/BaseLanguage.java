@@ -1,5 +1,7 @@
 package com.dewangan.jyotirmay.language;
 
+import com.dewangan.jyotirmay.core.Word;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +11,7 @@ import javax.persistence.Id;
  */
 public interface BaseLanguage {
     public Integer getId();
-    public Integer getWordId();
+    public Word getEngWord();
     public String getTargetWord();
     public String getPartOfSpeech();
 }

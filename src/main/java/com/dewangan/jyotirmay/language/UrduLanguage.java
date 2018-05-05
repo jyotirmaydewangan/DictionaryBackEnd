@@ -1,5 +1,6 @@
 package com.dewangan.jyotirmay.language;
 
+import com.dewangan.jyotirmay.core.Word;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
@@ -9,19 +10,21 @@ import javax.persistence.*;
  * Created by jyotirmay.d on 10/11/17.
  */
 @Entity
-@Table(name = "urdu")
+@Table(name = "Urdu")
 @NamedQueries({
-        @NamedQuery(name = "findUrduWordByWordId", query = "from UrduLanguage u where u.wordId = :wordId"),
-        @NamedQuery(name = "findUrduWordByWord", query = "from UrduLanguage u where u.targetWord = :word"),
-        @NamedQuery(name = "findTopUrduWordByWordId", query = "from UrduLanguage u where u.wordId = :wordId Order By u.id asc"),
-        @NamedQuery(name = "findTopNonTextUrduWordByWordId", query = "from UrduLanguage u where u.partOfSpeech != :partOfSpeech and u.wordId = :wordId Order By u.id asc"),
-        @NamedQuery(name = "findUrduWordList", query = "select distinct w.targetWord from UrduLanguage w where w.targetWord like :begin and w.targetWord not like :space")
+       @NamedQuery(name = "findUrduWordByWord", query = "from UrduLanguage u where u.engWord.englishWord = :word"),
+       @NamedQuery(name = "findEnglishWordByUrduWord", query = "from UrduLanguage h where h.targetWord = :word"),
+       @NamedQuery(name = "findUrduWordList", query = "select distinct w.targetWord from UrduLanguage w where w.targetWord like :begin and w.targetWord not like :space")
 })
 public class UrduLanguage implements BaseLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
-    public Integer wordId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wordId")
+    public Word engWord;
+
     public String targetWord;
     public String partOfSpeech;
 
@@ -33,12 +36,12 @@ public class UrduLanguage implements BaseLanguage {
         this.id = id;
     }
 
-    public Integer getWordId() {
-        return wordId;
+    public Word getEngWord() {
+        return engWord;
     }
 
-    public void setWordId(Integer wordId) {
-        this.wordId = wordId;
+    public void setEngWord(Word engWord) {
+        this.engWord = engWord;
     }
 
     public String getTargetWord() {

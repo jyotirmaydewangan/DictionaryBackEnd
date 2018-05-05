@@ -1,14 +1,11 @@
 package com.dewangan.jyotirmay;
 
-import com.dewangan.jyotirmay.auth.GreetingAuthenticator;
 import com.dewangan.jyotirmay.core.*;
 import com.dewangan.jyotirmay.db.*;
 import com.dewangan.jyotirmay.db.language.*;
 import com.dewangan.jyotirmay.language.*;
 import com.dewangan.jyotirmay.resources.*;
 import io.dropwizard.Application;
-import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -29,8 +26,9 @@ public class DictionaryBackEndApplication
      * Hibernate bundle.
      */
     private final HibernateBundle<DictionaryBackEndConfiguration> hibernateBundle = new HibernateBundle<DictionaryBackEndConfiguration>(
-                    Employee.class, Sense.class, SemanticLink.class, LexicalLink.class,
-                    Sample.class, Word.class, Script.class,
+                    Word.class, Script.class,
+
+                    Antonym.class, Definition.class, Synonym.class, SeeAlso.class,
 
                     HindiLanguage.class, UrduLanguage.class, TeluguLanguage.class,
                     BengaliLanguage.class, MarathiLanguage.class
@@ -67,14 +65,9 @@ public class DictionaryBackEndApplication
 
     @Override
     public void run(final DictionaryBackEndConfiguration configuration, final Environment environment) {
-        //Create Employee DAO.
-        final EmployeeDAO employeeDAO = new EmployeeDAO(hibernateBundle.getSessionFactory());
-        final SenseDAO senseDAO = new SenseDAO(hibernateBundle.getSessionFactory());
+
         final WordDAO wordDAO = new WordDAO(hibernateBundle.getSessionFactory());
         final ScriptDAO scriptDAO = new ScriptDAO(hibernateBundle.getSessionFactory());
-        final SemanticLinkDAO semanticLinkDAO = new SemanticLinkDAO(hibernateBundle.getSessionFactory());
-        final LexicalLinkDAO lexicalLinkDAO = new LexicalLinkDAO(hibernateBundle.getSessionFactory());
-        final SampleDAO sempleDAO = new SampleDAO(hibernateBundle.getSessionFactory());
 
         final HindiLanguageDAO hindiLanguageDAO = new HindiLanguageDAO(hibernateBundle.getSessionFactory());
         final UrduLanguageDAO urduLanguageDAO = new UrduLanguageDAO(hibernateBundle.getSessionFactory());
@@ -82,37 +75,11 @@ public class DictionaryBackEndApplication
         final BengaliLanguageDAO bengaliLanguageDAO = new BengaliLanguageDAO(hibernateBundle.getSessionFactory());
         final MarathiLanguageDAO marathiLanguageDAO = new MarathiLanguageDAO(hibernateBundle.getSessionFactory());
 
-        //Create Jersey client.
-        final Client client = new JerseyClientBuilder(environment)
-                .using(configuration.getJerseyClientConfiguration())
-                .build(getName());
-        //Register authenticator.
-
-        environment.jersey().register(new AuthDynamicFeature(
-                new BasicCredentialAuthFilter.Builder<User>()
-                        .setAuthenticator(new GreetingAuthenticator(configuration.getLogin(),
-                                configuration.getPassword()))
-                        .setRealm("SECURITY REALM")
-                        .buildAuthFilter()));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
-        //environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         //Register a simple resource.
-        environment.jersey().register(new HelloResource());
-        //Register a secured resource.
-        environment.jersey().register(new SecuredHelloResource());
-        //Register a database-backed resource.
-        environment.jersey().register(new EmployeesResource(employeeDAO));
-        environment.jersey().register(new WordResource(wordDAO, scriptDAO, senseDAO, semanticLinkDAO, lexicalLinkDAO, sempleDAO,
-
-                                                        hindiLanguageDAO, urduLanguageDAO, teluguLanguageDAO,
-                                                        bengaliLanguageDAO, marathiLanguageDAO));
-        //Register a resource using Jersey client.
-        environment.jersey().register(
-                new ConverterResource(
-                        client,
-                        configuration.getApiURL(),
-                        configuration.getApiKey())
-        );
+        environment.jersey().register(new WordResource(wordDAO, scriptDAO,
+                                                        hindiLanguageDAO, urduLanguageDAO,
+                                                        teluguLanguageDAO, bengaliLanguageDAO,
+                                                        marathiLanguageDAO));
     }
 
 }
