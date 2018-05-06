@@ -33,6 +33,7 @@ public class WordResource {
     private final MarathiLanguageDAO marathiLanguageDAO;
 
     public WordResource(WordDAO wordDAO, ScriptDAO scriptDAO,
+
                         HindiLanguageDAO hindiLanguageDAO, UrduLanguageDAO urduLanguageDAO,
                         TeluguLanguageDAO teluguLanguageDAO, BengaliLanguageDAO bengaliLanguageDAO,
                         MarathiLanguageDAO marathiLanguageDAO) {

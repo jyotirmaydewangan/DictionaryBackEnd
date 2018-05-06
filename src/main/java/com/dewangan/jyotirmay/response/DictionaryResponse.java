@@ -11,12 +11,12 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DictionaryResponse {
     private String word;
-    private Map<String, List<String>> meaning;
-    private Map<String, List<String>> definition;
-    private Map<String, List<String>> use;
-    private Map<String, List<String>> synonym;
-    private List<String> antonym;
-    private List<String> seeAlso;
+    private Map<String, Set<String>> meaning;
+    private Map<String, Set<String>> definition;
+    private Map<String, Set<String>> use;
+    private Map<String, Set<String>> synonym;
+    private Set<String> antonym;
+    private Set<String> seeAlso;
 
     public String getWord() {
         return word;
@@ -26,135 +26,135 @@ public class DictionaryResponse {
         this.word = word;
     }
 
-    public Map<String, List<String>> getMeaning() {
+    public Map<String, Set<String>> getMeaning() {
         return meaning;
     }
 
-    public void setMeaning(Map<String, List<String>> meaning) {
+    public void setMeaning(Map<String, Set<String>> meaning) {
         this.meaning = meaning;
     }
 
     public void addMeaning(String pos, String meaning){
 
         if(this.meaning == null) {
-            setMeaning(new HashMap<String, List<String>>());
+            setMeaning(new HashMap<String, Set<String>>());
         }
 
-        List localMeaning = getMeaning().get(pos);
+        Set localMeaning = getMeaning().get(pos);
 
         if(localMeaning == null) {
-            localMeaning = new ArrayList<String>();
+            localMeaning = new HashSet<String>();
             getMeaning().put(pos, localMeaning);
         }
 
         localMeaning.add(meaning);
     }
 
-    public Map<String, List<String>> getDefinition() {
+    public Map<String, Set<String>> getDefinition() {
         return definition;
     }
 
-    public void setDefinition(Map<String, List<String>> definition) {
+    public void setDefinition(Map<String, Set<String>> definition) {
         this.definition = definition;
     }
 
     public void addDefinition(String pos, String definition){
 
         if(this.definition == null) {
-            setDefinition(new HashMap<String, List<String>>());
+            setDefinition(new HashMap<String, Set<String>>());
         }
 
-        List localDefinition = getDefinition().get(pos);
+        Set localDefinition = getDefinition().get(pos);
 
         if(localDefinition == null) {
-            localDefinition = new ArrayList<String>();
+            localDefinition = new HashSet<String>();
             getDefinition().put(pos, localDefinition);
         }
 
         localDefinition.add(definition);
     }
 
-    public Map<String, List<String>> getUse() {
+    public Map<String, Set<String>> getUse() {
         return use;
     }
 
-    public void setUse(Map<String, List<String>> use) {
+    public void setUse(Map<String, Set<String>> use) {
         this.use = use;
     }
 
     public void addUse(String pos, String use){
 
         if(this.use == null) {
-            setUse(new HashMap<String, List<String>>());
+            setUse(new HashMap<String, Set<String>>());
         }
 
-        List localUse = getUse().get(pos);
+        Set localUse = getUse().get(pos);
 
         if(localUse == null) {
-            localUse = new ArrayList<String>();
+            localUse = new HashSet<String>();
             getUse().put(pos, localUse);
         }
 
         localUse.add(use);
     }
 
-    public Map<String, List<String>> getSynonym() {
+    public Map<String, Set<String>> getSynonym() {
         return synonym;
     }
 
-    public void setSynonym(Map<String, List<String>> synonym) {
+    public void setSynonym(Map<String, Set<String>> synonym) {
         this.synonym = synonym;
     }
 
     public void addSynonym(String pos, String synonym){
 
         if(this.synonym == null) {
-            setSynonym(new HashMap<String, List<String>>());
+            setSynonym(new HashMap<String, Set<String>>());
         }
 
-        List localSynonym = getSynonym().get(pos);
+        Set localSynonym = getSynonym().get(pos);
 
         if(localSynonym == null) {
-            localSynonym = new ArrayList<String>();
+            localSynonym = new HashSet<String>();
             getSynonym().put(pos, localSynonym);
         }
 
         localSynonym.add(synonym);
     }
 
-    public List<String> getAntonym() {
+    public Set<String> getAntonym() {
         return antonym;
     }
 
-    public void setAntonym(List<String> antonym) {
+    public void setAntonym(Set<String> antonym) {
         this.antonym = antonym;
     }
 
     public void addAntonym(String antonym){
 
         if(this.antonym == null) {
-            setAntonym(new ArrayList<String>());
+            setAntonym(new HashSet<String>());
         }
 
-        List localAntonym = getAntonym();
+        Set localAntonym = getAntonym();
         localAntonym.add(antonym);
     }
 
-    public List<String> getSeeAlso() {
+    public Set<String> getSeeAlso() {
         return seeAlso;
     }
 
-    public void setSeeAlso(List<String> seeAlso) {
+    public void setSeeAlso(Set<String> seeAlso) {
         this.seeAlso = seeAlso;
     }
 
     public void addSeeAlso(String seeAlso){
 
         if(this.seeAlso == null) {
-            setSeeAlso(new ArrayList<String>());
+            setSeeAlso(new HashSet<String>());
         }
 
-        List localSeeAlso = getSeeAlso();
+        Set localSeeAlso = getSeeAlso();
         localSeeAlso.add(seeAlso);
     }
 }

@@ -81,8 +81,4 @@ public class Word {
     public void setSeeAlso(List<SeeAlso> seeAlso) {
         this.seeAlso = seeAlso;
     }
-
-
-
-
 }
