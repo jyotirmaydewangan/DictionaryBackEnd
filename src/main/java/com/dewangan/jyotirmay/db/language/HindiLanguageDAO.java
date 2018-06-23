@@ -30,11 +30,19 @@ public class HindiLanguageDAO extends AbstractDAO<HindiLanguage> implements Base
         return (ArrayList<BaseLanguage>) getResource.list();
     }
 
-    public List<String> findWordList(String ch, Integer start) {
+    public List<String> findWordList(String ch, Integer start, Integer limit) {
         Query getResource = namedQuery("findHindiWordList")
                 .setParameter("begin", ch+"%")
                 .setParameter("space", "% %")
-                .setFirstResult(start).setMaxResults(80);
+                .setFirstResult(start).setMaxResults(limit);
+
+        return (ArrayList<String>) getResource.list();
+    }
+
+    public List<String> findWordListAutoList(String ch, Integer start, Integer limit) {
+        Query getResource = namedQuery("findHindiWordListAutoList")
+                .setParameter("begin", ch+"%")
+                .setFirstResult(start).setMaxResults(limit);
 
         return (ArrayList<String>) getResource.list();
     }

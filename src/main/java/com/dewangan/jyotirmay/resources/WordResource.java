@@ -82,6 +82,36 @@ public class WordResource {
 
 
     @GET
+    @Path("/wordList/{lang}/{word}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public List<Map<String, String>> getAjaxWordList(@PathParam(value = "lang") String lang, @PathParam(value = "word") String word){
+        List<Map<String, String>> wordList = new ArrayList<Map<String, String>>();
+
+        if(lang.equalsIgnoreCase("english")) {
+            List<Word> words = wordDAO.findWordListAutoList(word, 0, 10);
+
+            for (Word localWord : words) {
+                Map<String, String> wordMap = new HashMap<String, String>();
+                wordMap.put("word",localWord.getEnglishWord());
+                wordList.add(wordMap);
+            }
+        } else {
+            BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
+            List<String> words = baseLanguageDAO.findWordListAutoList(word, 0, 10);
+            for (String localWord : words) {
+                Map<String, String> wordMap = new HashMap<String, String>();
+                wordMap.put("word",localWord);
+                wordList.add(wordMap);
+            }
+        }
+
+        return wordList;
+    }
+
+
+
+    @GET
     @Path("/wordList/{lang}/{char}/{page}")
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
@@ -93,14 +123,14 @@ public class WordResource {
         Integer count=1;
 
         if(lang.equalsIgnoreCase("english")) {
-            List<Word> words = wordDAO.findWordList(ch, (page - 1) * 80);
+            List<Word> words = wordDAO.findWordList(ch, (page - 1) * 80, 80);
             count = wordDAO.findWordCount(ch);
             for (Word word : words) {
                 wordList.add(word.getEnglishWord());
             }
         } else {
             BaseLanguageDAO baseLanguageDAO = selectProperLanguage(lang);
-            List<String> words = baseLanguageDAO.findWordList(ch, (page - 1) * 80);
+            List<String> words = baseLanguageDAO.findWordList(ch, (page - 1) * 80, 80);
             count = baseLanguageDAO.findWordCount(ch);
             for (String word : words) {
                 wordList.add(word);

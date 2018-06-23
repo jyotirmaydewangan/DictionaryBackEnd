@@ -27,11 +27,19 @@ public class TeluguLanguageDAO extends AbstractDAO<TeluguLanguage> implements Ba
         return (ArrayList<BaseLanguage>) getResource.list();
     }
 
-    public List<String> findWordList(String ch, Integer start) {
+    public List<String> findWordList(String ch, Integer start, Integer limit) {
         Query getResource = namedQuery("findTeluguWordList")
                 .setParameter("begin", ch+"%")
                 .setParameter("space", "% %")
-                .setFirstResult(start).setMaxResults(80);
+                .setFirstResult(start).setMaxResults(limit);
+
+        return (ArrayList<String>) getResource.list();
+    }
+
+    public List<String> findWordListAutoList(String ch, Integer start, Integer limit) {
+        Query getResource = namedQuery("findTeluguWordListAutoList")
+                .setParameter("begin", ch+"%")
+                .setFirstResult(start).setMaxResults(limit);
 
         return (ArrayList<String>) getResource.list();
     }

@@ -27,11 +27,19 @@ public class BengaliLanguageDAO extends AbstractDAO<BengaliLanguage> implements 
         return (ArrayList<BaseLanguage>) getResource.list();
     }
 
-    public List<String> findWordList(String ch, Integer start) {
+    public List<String> findWordList(String ch, Integer start, Integer limit) {
         Query getResource = namedQuery("findBengaliWordList")
                 .setParameter("begin", ch+"%")
                 .setParameter("space", "% %")
-                .setFirstResult(start).setMaxResults(80);
+                .setFirstResult(start).setMaxResults(limit);
+
+        return (ArrayList<String>) getResource.list();
+    }
+
+    public List<String> findWordListAutoList(String ch, Integer start, Integer limit) {
+        Query getResource = namedQuery("findBengaliWordListAutoList")
+                .setParameter("begin", ch+"%")
+                .setFirstResult(start).setMaxResults(limit);
 
         return (ArrayList<String>) getResource.list();
     }

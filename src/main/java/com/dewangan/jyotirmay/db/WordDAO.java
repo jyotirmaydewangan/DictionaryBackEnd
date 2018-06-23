@@ -26,14 +26,24 @@ public class WordDAO extends AbstractDAO<Word> {
         return (Word) getResource.list().get(0);
     }
 
-    public List<Word> findWordList(String ch, Integer start) {
+    public List<Word> findWordList(String ch, Integer start, Integer limit) {
         Query getResource = namedQuery("findWordList")
                 .setParameter("begin", ch+"%")
                 .setParameter("space", "% %")
-                .setFirstResult(start).setMaxResults(80);
+                .setFirstResult(start).setMaxResults(limit);
 
         return (ArrayList<Word>) getResource.list();
     }
+
+
+    public List<Word> findWordListAutoList(String ch, Integer start, Integer limit) {
+        Query getResource = namedQuery("findWordListAutoList")
+                .setParameter("begin", ch+"%")
+                .setFirstResult(start).setMaxResults(limit);
+
+        return (ArrayList<Word>) getResource.list();
+    }
+
 
     public Integer findWordCount(String ch) {
         Query getResource = namedQuery("findWordList").setParameter("begin", ch+"%").setParameter("space", "% %");

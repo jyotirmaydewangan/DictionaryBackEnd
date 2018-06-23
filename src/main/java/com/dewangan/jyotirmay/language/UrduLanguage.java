@@ -14,7 +14,9 @@ import javax.persistence.*;
 @NamedQueries({
        @NamedQuery(name = "findUrduWordByWord", query = "from UrduLanguage u where u.engWord.englishWord = :word"),
        @NamedQuery(name = "findEnglishWordByUrduWord", query = "from UrduLanguage h where h.targetWord = :word"),
-       @NamedQuery(name = "findUrduWordList", query = "select distinct w.targetWord from UrduLanguage w where w.targetWord like :begin and w.targetWord not like :space")
+       @NamedQuery(name = "findUrduWordList", query = "select distinct w.targetWord from UrduLanguage w where w.targetWord like :begin and w.targetWord not like :space"),
+       @NamedQuery(name = "findUrduWordListAutoList", query = "select distinct w.targetWord from UrduLanguage w where w.targetWord like :begin")
+
 })
 public class UrduLanguage implements BaseLanguage {
     @Id

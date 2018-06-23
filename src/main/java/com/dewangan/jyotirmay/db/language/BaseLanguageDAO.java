@@ -14,6 +14,7 @@ import java.util.List;
 public interface BaseLanguageDAO {
     public List<BaseLanguage> findTargetWordByWord(String word);
     public List<BaseLanguage> findEnglishWordByTargetWord(String word);
-    public List<String> findWordList(String ch, Integer start);
+    public List<String> findWordList(String ch, Integer start, Integer limit);
+    public List<String> findWordListAutoList(String ch, Integer start, Integer limit);
     public Integer findWordCount(String ch);
 }

@@ -13,7 +13,8 @@ import java.util.List;
 @Table(name = "Words")
 @NamedQueries({
         @NamedQuery(name = "findWordByWord", query = "from Word w where w.englishWord = :word"),
-        @NamedQuery(name = "findWordList", query = "from Word w where w.englishWord like :begin and w.englishWord not like :space")
+        @NamedQuery(name = "findWordList", query = "from Word w where w.englishWord like :begin and w.englishWord not like :space"),
+        @NamedQuery(name = "findWordListAutoList", query = "from Word w where w.englishWord like :begin")
 })
 public class Word {
     @Id
