@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by jyotirmay.d on 05/05/18.
  */
 @Entity
-@Table(name = "SeeAlso")
+@Table(name = "seeAlso")
 public class SeeAlso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

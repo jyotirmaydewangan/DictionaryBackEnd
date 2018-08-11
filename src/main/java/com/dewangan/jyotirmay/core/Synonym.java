@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by jyotirmay.d on 05/05/18.
  */
 @Entity
-@Table(name = "Synonyms")
+@Table(name = "synonyms")
 public class Synonym {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
