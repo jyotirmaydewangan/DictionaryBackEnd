@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by jyotirmay.d on 10/11/17.
  */
 @Entity
-@Table(name = "Hindi")
+@Table(name = "hindi")
 @NamedQueries({
         @NamedQuery(name = "findHindiWordByWord", query = "from HindiLanguage h where h.engWord.englishWord = :word"),
         @NamedQuery(name = "findEnglishWordByHindiWord", query = "from HindiLanguage h where h.targetWord = :word"),
