@@ -27,6 +27,18 @@ database:
     password: lifeofpi
     # the JDBC URL; the database is called DWGettingStarted
     url: jdbc:mysql://localhost:3306/GoogleDictionary
+    properties:
+      charSet: UTF-8
+      characterEncoding: UTF-8
+      useUnicode: true
+      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    maxWaitForConnection: 1s
+    validationQuery: "/* DropWizard Health Check */ SELECT 1"
+    minSize: 5
+    maxSize: 25
+    checkConnectionWhileIdle: false
+    checkConnectionOnBorrow: true
+
 
 #API settings
 #API URL
