@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "hindi")
 @NamedQueries({
-        @NamedQuery(name = "findHindiWordByWord", query = "from HindiLanguage h where h.engWord.englishWord = :word"),
+        @NamedQuery(name = "findHindiWordByWord", query = "from HindiLanguage h where h.engWord.englishWord = :word and h.partOfSpeech != 'invalid'"),
         @NamedQuery(name = "findEnglishWordByHindiWord", query = "from HindiLanguage h where h.targetWord = :word"),
         @NamedQuery(name = "findHindiWordList", query = "select distinct w.targetWord from HindiLanguage w where w.targetWord like :begin and w.targetWord not like :space"),
         @NamedQuery(name = "findHindiWordListAutoList", query = "select distinct w.targetWord from HindiLanguage w where w.targetWord like :begin")
