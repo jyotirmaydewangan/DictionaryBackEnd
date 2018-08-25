@@ -27,9 +27,8 @@ public class WordDAO extends AbstractDAO<Word> {
     }
 
     public List<Word> findWordList(String ch, Integer start, Integer limit) {
-        Query getResource = namedQuery("findWordList")
+        Query getResource = namedQuery("findSortedWordList")
                 .setParameter("begin", ch+"%")
-                .setParameter("space", "% %")
                 .setFirstResult(start).setMaxResults(limit);
 
         return (ArrayList<Word>) getResource.list();

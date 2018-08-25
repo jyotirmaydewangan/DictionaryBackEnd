@@ -28,7 +28,7 @@ public class DictionaryBackEndApplication
     private final HibernateBundle<DictionaryBackEndConfiguration> hibernateBundle = new HibernateBundle<DictionaryBackEndConfiguration>(
                     Word.class, Script.class,
 
-                    Antonym.class, Definition.class, Synonym.class, SeeAlso.class,
+                    Antonym.class, Definition.class, Synonym.class, SeeAlso.class, Analysis.class,
 
                     HindiLanguage.class, UrduLanguage.class, TeluguLanguage.class,
                     BengaliLanguage.class, MarathiLanguage.class

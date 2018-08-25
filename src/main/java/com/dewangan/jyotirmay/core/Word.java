@@ -14,6 +14,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "findWordByWord", query = "from Word w where w.englishWord = :word"),
         @NamedQuery(name = "findWordList", query = "from Word w where w.englishWord like :begin and w.englishWord not like :space"),
+        @NamedQuery(name = "findSortedWordList", query = "from Word w where w.englishWord like :begin order by w.analysis.id asc"),
         @NamedQuery(name = "findWordListAutoList", query = "from Word w where w.englishWord like :begin")
 })
 public class Word {
@@ -22,6 +23,9 @@ public class Word {
     private Integer id;
 
     private String englishWord;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "engWord")
+    private Analysis analysis;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "word")
     private List<Definition> definitions;
@@ -81,5 +85,13 @@ public class Word {
 
     public void setSeeAlso(List<SeeAlso> seeAlso) {
         this.seeAlso = seeAlso;
+    }
+
+    public Analysis getAnalysis() {
+        return analysis;
+    }
+
+    public void setAnalysis(Analysis analysis) {
+        this.analysis = analysis;
     }
 }
