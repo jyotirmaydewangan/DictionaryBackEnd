@@ -1,6 +1,7 @@
 package com.dewangan.jyotirmay.db;
 
 
+import com.dewangan.jyotirmay.core.Analysis;
 import com.dewangan.jyotirmay.core.Word;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
@@ -31,7 +32,12 @@ public class WordDAO extends AbstractDAO<Word> {
                 .setParameter("begin", ch+"%")
                 .setFirstResult(start).setMaxResults(limit);
 
-        return (ArrayList<Word>) getResource.list();
+        List<Word> result = new ArrayList<>();
+        for(Analysis analysis: (ArrayList<Analysis>)getResource.list()) {
+            result.add(analysis.getWord());
+        }
+
+        return result;
     }
 
 

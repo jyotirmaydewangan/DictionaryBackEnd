@@ -10,14 +10,19 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "analysis")
+@NamedQueries({
+        @NamedQuery(name = "findSortedWordList", query = "from Analysis a where a.englishWord like :begin order by a.id asc"),
+})
 public class Analysis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String englishWord;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wordId")
-    private Word engWord;
+    private Word word;
 
     private Integer tCount;
 
@@ -37,12 +42,12 @@ public class Analysis {
         this.id = id;
     }
 
-    public Word getEngWord() {
-        return engWord;
+    public Word getWord() {
+        return word;
     }
 
-    public void setEngWord(Word engWord) {
-        this.engWord = engWord;
+    public void setWord(Word word) {
+        this.word = word;
     }
 
     public Integer gettCount() {
@@ -83,5 +88,13 @@ public class Analysis {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    public String getEnglishWord() {
+        return englishWord;
+    }
+
+    public void setEnglishWord(String englishWord) {
+        this.englishWord = englishWord;
     }
 }
